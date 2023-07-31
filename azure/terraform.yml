@@ -7,8 +7,10 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-- task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@1
+- task: TerraformInstaller@1
   displayName: 'Install Terraform latest'
+
+# https://github.com/microsoft/azure-pipelines-terraform/tree/main/Tasks/TerraformTask/TerraformTaskV4
 
 - task: TerraformTaskV4@4
   displayName: Terraform Init
@@ -16,21 +18,28 @@ steps:
     provider: 'azurerm'
     command: 'init'
     workingDirectory: terraform
-    backendServiceArm: 'k8sdeploy'
+    backendServiceArm: k8sdeploy
+    backendAzureRmResourceGroupName: k8sdeploy
     backendAzureRmStorageAccountName: k8sdeploysto
+    backendAzureRmContainerName: tfstate
+    backendAzureRmKey: state.tfstate
 
 - task: TerraformTaskV4@4
+  name: terraformPlan
   displayName: Terraform Plan
   inputs:
     provider: 'azurerm'
     command: 'plan'
+    commandOptions: '-out main.tfplan'
     workingDirectory: terraform
     environmentServiceNameAzureRM: 'k8sdeploy'
 
 # - task: TerraformTaskV1@0
 #   displayName: Terraform Apply
+#   condition: eq(variables['terraformPlan.changesPresent'], 'true')
 #   inputs:
 #     provider: 'azurerm'
 #     command: 'apply'
+#     commandOptions: 'main.tfplan'
 #     workingDirectory: terraform
 #     environmentServiceNameAzureRM: 'k8sdeploy'
