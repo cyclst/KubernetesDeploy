@@ -7,9 +7,9 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-  - task: DotNetCoreCLI@2
-    displayName: 'Build Solution'
-    inputs:
-      command: 'build'
-      projects: 'src/Weather.sln'
-      arguments: '--configuration $(buildConfiguration)'
+- task: DotNetCoreCLI@2
+  displayName: 'Build Solution'
+  inputs:
+    command: 'build'
+    projects: 'src/Weather.sln'
+    arguments: '--configuration $(buildConfiguration)'
