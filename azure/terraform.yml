@@ -17,6 +17,7 @@ steps:
     command: 'init'
     workingDirectory: terraform
     backendServiceArm: 'k8sdeploy'
+    backendAzureRmStorageAccountName: k8sdeploysto
 
 - task: TerraformTaskV4@4
   displayName: Terraform Plan
